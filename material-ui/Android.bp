@@ -1,0 +1,52 @@
+//
+// Copyright (C) 2024-2026 ._______166
+//
+
+android_library {
+    name: "jetpref-material-ui",
+    static_libs: [
+        "androidx.compose.animation_animation",
+        "androidx.compose.animation_animation-core",
+        "androidx.compose.foundation_foundation",
+        "androidx.compose.foundation_foundation-layout",
+        "androidx.compose.material_material-icons-core",
+        "androidx.compose.material_material-icons-extended",
+        "androidx.compose.material_material-ripple",
+        "androidx.compose.material3_material3",
+        "androidx.compose.runtime_runtime",
+        "androidx.compose.runtime_runtime-annotation",
+        "androidx.compose.runtime_runtime-retain",
+        "androidx.compose.runtime_runtime-saveable",
+        "androidx.compose.ui_ui",
+        "androidx.compose.ui_ui-geometry",
+        "androidx.compose.ui_ui-graphics",
+        "androidx.compose.ui_ui-text",
+        "androidx.compose.ui_ui-tooling-preview",
+        "androidx.compose.ui_ui-unit",
+        "androidx.compose.ui_ui-util",
+        "androidx.lifecycle_lifecycle-runtime",
+        "androidx.lifecycle_lifecycle-runtime-compose",
+        "androidx.lifecycle_lifecycle-runtime-ktx",
+        "androidx.lifecycle_lifecycle-viewmodel-compose",
+        "androidx.lifecycle_lifecycle-viewmodel-savedstate",
+        "androidx.navigation_navigation-common",
+        "androidx.navigation_navigation-compose",
+        "androidx.navigation_navigation-runtime",
+        "androidx.navigationevent_navigationevent",
+        "androidx.navigationevent_navigationevent-compose",
+        "androidx.savedstate_savedstate",
+        "androidx.savedstate_savedstate-compose",
+        "androidx.window_window-core",
+        "kotlin-stdlib",
+    ],
+
+    manifest: "src/androidMain/AndroidManifest.xml",
+
+    srcs: [
+        "src/androidMain/kotlin/**/*.kt",
+    ],
+
+    kotlincflags: ["-Xjvm-default=all"],
+    sdk_version: "current",
+    min_sdk_version: "24",
+}
