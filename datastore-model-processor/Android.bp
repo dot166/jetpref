@@ -1,0 +1,14 @@
+java_plugin {
+    name: "jetpref-datastore-model-processor",
+    srcs: [
+        "src/jvmMain/kotlin/**/*.kt",
+    ],
+    static_libs: [
+        "kotlin_symbol_processing_api",
+        "kotlinpoet",
+        "kotlinpoet-ksp",
+        "kotlin-stdlib",
+    ],
+    java_resource_dirs: ["src/jvmMain/resources"],
+    generates_api: true,
+}

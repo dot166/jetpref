@@ -18,6 +18,7 @@ package dev.patrickgold.jetpref.datastore
 
 import dev.patrickgold.jetpref.datastore.model.PreferenceModel
 import dev.patrickgold.jetpref.datastore.runtime.DataStore
+import dev.patrickgold.jetpref.datastore.runtime.PreferenceModelDuplicateKeyException
 import dev.patrickgold.jetpref.datastore.runtime.PreferenceModelNotFoundException
 import kotlin.reflect.KClass
 
@@ -31,6 +32,19 @@ import kotlin.reflect.KClass
  * @since 0.3.0
  */
 @Throws(PreferenceModelNotFoundException::class)
-expect fun <T : PreferenceModel> jetprefDataStoreOf(
-    modelClass: KClass<T>,
-): DataStore<T>
+fun <T : PreferenceModel> jetprefDataStoreOf(modelClass: KClass<T>): DataStore<T> {
+    val modelImplInstance = try {
+        val modelImplName = modelClass.qualifiedName!! + "Impl"
+        val modelImplClass = Class.forName(modelImplName)
+        modelImplClass.getDeclaredConstructor().newInstance() as T
+    } catch (e: PreferenceModelDuplicateKeyException) {
+        throw e
+    } catch (e: Throwable) {
+        val cause = e.cause
+        if (cause != null && cause is PreferenceModelDuplicateKeyException) {
+            throw cause
+        }
+        throw PreferenceModelNotFoundException(modelClass.qualifiedName.toString(), e)
+    }
+    return DataStore(modelImplInstance)
+}

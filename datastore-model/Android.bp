@@ -1,0 +1,24 @@
+//
+// Copyright (C) 2024-2026 ._______166
+//
+
+android_library {
+    name: "jetpref-datastore-model",
+    static_libs: [
+        "kotlin-stdlib",
+        "kotlinx-coroutines-core",
+    ],
+
+    manifest: "src/androidMain/AndroidManifest.xml",
+
+    srcs: [
+        // common code
+        "src/commonMain/kotlin/**/*.kt",
+        // android
+        "src/androidMain/kotlin/**/*.kt",
+    ],
+
+    kotlincflags: ["-Xjvm-default=all"],
+    sdk_version: "current",
+    min_sdk_version: "24",
+}

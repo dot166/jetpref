@@ -43,29 +43,9 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlinx.coroutines.test)
-            }
-        }
-        val jvmCommonMain = create("jvmCommonMain") {
-            dependsOn(commonMain.get())
-        }
-        val jvmCommonTest = create("jvmCommonTest") {
-            dependsOn(commonTest.get())
-            dependencies {
                 implementation(libs.junit.jupiter.api)
                 implementation(libs.junit.jupiter.params)
             }
-        }
-        jvmMain {
-            dependsOn(jvmCommonMain)
-        }
-        jvmTest {
-            dependsOn(jvmCommonTest)
-        }
-        androidMain {
-            dependsOn(jvmCommonMain)
-        }
-        getByName("androidHostTest") {
-            dependsOn(jvmCommonTest)
         }
     }
 }

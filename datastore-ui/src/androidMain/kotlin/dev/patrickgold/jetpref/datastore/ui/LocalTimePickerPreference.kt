@@ -71,6 +71,7 @@ import kotlinx.coroutines.launch
  *
  * @since 0.2.0-rc04
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocalTimePickerPreference(
     pref: PreferenceData<LocalTime>,
