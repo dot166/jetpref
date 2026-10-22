@@ -72,6 +72,46 @@ suspend fun <T : PreferenceModel> DataStore<T>.initAndroid(
     )
 }
 
+
+/**
+ * Initialize the datastore with given [context] and [datastoreName]. The name should be constant, as it
+ * is used for loading and persisting the datastore file from the same location again.
+ *
+ * Typically, this method is called once in the `Application.onCreate()` method. If this method is never
+ * called, the model behaves as if it was an in-memory-only model.
+ *
+ * This method can be called multiple times, this can be useful in context switch scenarios (e.g. direct
+ * boot to user unlocked switch). In this case, ALL existing runtime data gets overridden, regardless of
+ * the success or failure of this request.
+ *
+ * @param context The Android context, typically the application context. Caution: the datastore file location
+ *  is derived from given context. For work profiles or direct-boot contexts the locations might differ.
+ * @param datastoreName The name of the datastore name. Should be constant.
+ * @param shouldPersist If live changes to the model's values should be persisted back to the datastore file
+ *  on-disk. Defaults to true.
+ * @return A result object. When this method returns, the model is guaranteed to have been initialized,
+ *  either with the values, or with default values for failure.
+ *
+ * @since 0.5.0
+ */
+suspend fun RuntimeDataStore.initRuntimeStoreAndroid(
+    context: Context,
+    datastoreName: String,
+    shouldPersist: Boolean = true,
+): Result<Unit> {
+    val storageProvider = androidAppDataStorageOf(context, datastoreName)
+    return this.init(
+        loadStrategy = LoadStrategy.UseReader(storageProvider),
+        persistStrategy = if (shouldPersist) {
+            PersistStrategy.UseWriter(storageProvider)
+        } else {
+            PersistStrategy.Disabled
+        },
+        datastoreName = datastoreName,
+        shouldPersist = shouldPersist,
+    )
+}
+
 /**
  * Returns the absolute path to the directory on the filesystem where preference datastore
  * files are created and used by JetPref are stored. Note that this path may change over time,

@@ -44,8 +44,8 @@ private const val DELIMITER = ";"
  *
  * @since 0.3.0
  */
-class DataStore<T : PreferenceModel> internal constructor(
-    private val model: T,
+open class DataStore<T : PreferenceModel> internal constructor(
+    protected val model: T,
 ): ReadOnlyProperty<Any?, T> {
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private val eventQueue = Channel<Event>(Channel.UNLIMITED)
