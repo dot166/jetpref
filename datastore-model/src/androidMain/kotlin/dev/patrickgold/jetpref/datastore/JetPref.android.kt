@@ -16,10 +16,8 @@
 
 package dev.patrickgold.jetpref.datastore
 
-import dev.patrickgold.jetpref.datastore.runtime.DataStore
 import dev.patrickgold.jetpref.datastore.runtime.PreferenceModelNotFoundException
 import dev.patrickgold.jetpref.datastore.runtime.RuntimeDataStore
-import dev.patrickgold.jetpref.datastore.runtime.RuntimePreferenceModel
 
 /**
  * Creates a new datastore instance for given [modelClass] and returns it.
