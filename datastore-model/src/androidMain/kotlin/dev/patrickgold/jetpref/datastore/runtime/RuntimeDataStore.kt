@@ -17,7 +17,19 @@
 package dev.patrickgold.jetpref.datastore.runtime
 
 import android.content.Context
+import dev.patrickgold.jetpref.datastore.annotations.PreferenceKey
+import dev.patrickgold.jetpref.datastore.model.BooleanPreferenceSerializer
+import dev.patrickgold.jetpref.datastore.model.DoublePreferenceSerializer
+import dev.patrickgold.jetpref.datastore.model.FloatPreferenceSerializer
+import dev.patrickgold.jetpref.datastore.model.IntPreferenceSerializer
+import dev.patrickgold.jetpref.datastore.model.LocalTime
+import dev.patrickgold.jetpref.datastore.model.LocalTimePreferenceSerializer
+import dev.patrickgold.jetpref.datastore.model.LongPreferenceSerializer
 import dev.patrickgold.jetpref.datastore.model.PreferenceData
+import dev.patrickgold.jetpref.datastore.model.PreferenceSerializer
+import dev.patrickgold.jetpref.datastore.model.PreferenceType
+import dev.patrickgold.jetpref.datastore.model.StringPreferenceSerializer
+import dev.patrickgold.jetpref.datastore.model.preferenceDataOf
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -76,5 +88,198 @@ class RuntimeDataStore internal constructor(): DataStore<RuntimePreferenceModel>
         runBlocking {
             initAndroid(ctx, datastoreName, shouldPersist)
         }
+    }
+
+    /**
+     * Declare a `boolean` preference entry. Its [key] must be unique within this preference model.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.1.0
+     */
+    fun boolean(
+        @PreferenceKey key: String,
+        default: Boolean,
+    ): PreferenceData<Boolean> {
+        return preferenceDataOf(
+            key = key,
+            default = default,
+            type = PreferenceType.boolean(),
+            serializer = BooleanPreferenceSerializer,
+        )
+    }
+
+    /**
+     * Declare a `double` preference entry. Its [key] must be unique within this preference model.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.1.0
+     */
+    fun double(
+        @PreferenceKey key: String,
+        default: Double,
+    ): PreferenceData<Double> {
+        return preferenceDataOf(
+            key = key,
+            default = default,
+            type = PreferenceType.double(),
+            serializer = DoublePreferenceSerializer,
+        )
+    }
+
+    /**
+     * Declare a `float` preference entry. Its [key] must be unique within this preference model.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.1.0
+     */
+    fun float(
+        @PreferenceKey key: String,
+        default: Float,
+    ): PreferenceData<Float> {
+        return preferenceDataOf(
+            key = key,
+            default = default,
+            type = PreferenceType.float(),
+            serializer = FloatPreferenceSerializer,
+        )
+    }
+
+    /**
+     * Declare an `int` preference entry. Its [key] must be unique within this preference model.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.1.0
+     */
+    fun int(
+        @PreferenceKey key: String,
+        default: Int,
+    ): PreferenceData<Int> {
+        return preferenceDataOf(
+            key = key,
+            default = default,
+            type = PreferenceType.integer(),
+            serializer = IntPreferenceSerializer,
+        )
+    }
+
+    /**
+     * Declare a `long` preference entry. Its [key] must be unique within this preference model.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.1.0
+     */
+    fun long(
+        @PreferenceKey key: String,
+        default: Long,
+    ): PreferenceData<Long> {
+        return preferenceDataOf(
+            key = key,
+            default = default,
+            type = PreferenceType.long(),
+            serializer = LongPreferenceSerializer,
+        )
+    }
+
+    /**
+     * Declare a `string` preference entry. Its [key] must be unique within this preference model.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.1.0
+     */
+    fun string(
+        @PreferenceKey key: String,
+        default: String,
+    ): PreferenceData<String> {
+        return preferenceDataOf(
+            key = key,
+            default = default,
+            type = PreferenceType.string(),
+            serializer = StringPreferenceSerializer,
+        )
+    }
+
+    /**
+     * Declare a custom preference entry. Its [key] must be unique within this preference model.
+     *
+     * In addition to the [key] and [default] value, this entry accepts a custom serializer. This allows
+     * for any type to be persisted in the preference model. The custom type must be serializable to a
+     * string with the given [serializer].
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     * @param serializer The serializer for the custom data type.
+     *
+     * @since 0.1.0
+     */
+    fun <V : Any> custom(
+        @PreferenceKey key: String,
+        default: V,
+        serializer: PreferenceSerializer<V>,
+    ): PreferenceData<V> {
+        return preferenceDataOf(
+            key = key,
+            default = default,
+            type = PreferenceType.string(),
+            serializer = serializer,
+        )
+    }
+
+    /**
+     * Declare a `enum` preference entry. Its [key] must be unique within this preference model.
+     *
+     * Enum values will internally be represented as a string, using the constant name as the value.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.1.0
+     */
+    inline fun <reified V : Enum<V>> enum(
+        @PreferenceKey key: String,
+        default: V,
+    ): PreferenceData<V> {
+        val serializer = object : PreferenceSerializer<V> {
+            override fun serialize(value: V): String {
+                return value.toString()
+            }
+
+            override fun deserialize(value: String): V? {
+                return try {
+                    enumValueOf<V>(value)
+                } catch (_: Exception) {
+                    null
+                }
+            }
+        }
+        return custom(key, default, serializer)
+    }
+
+    /**
+     * Declare a `local time` preference entry. Its [key] must be unique within this preference model.
+     *
+     * Local time values will internally be represented as a string.
+     *
+     * @param key The key of the preference, used for uniquely identifying this entry.
+     * @param default The default value of this entry.
+     *
+     * @since 0.2.0
+     */
+    fun localTime(
+        @PreferenceKey key: String,
+        default: LocalTime,
+    ): PreferenceData<LocalTime> {
+        return custom(key, default, LocalTimePreferenceSerializer)
     }
 }

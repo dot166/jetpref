@@ -20,8 +20,6 @@ import dev.patrickgold.jetpref.datastore.model.PreferenceModel
 import dev.patrickgold.jetpref.datastore.runtime.DataStore
 import dev.patrickgold.jetpref.datastore.runtime.PreferenceModelDuplicateKeyException
 import dev.patrickgold.jetpref.datastore.runtime.PreferenceModelNotFoundException
-import dev.patrickgold.jetpref.datastore.runtime.RuntimeDataStore
-import dev.patrickgold.jetpref.datastore.runtime.RuntimePreferenceModel
 import kotlin.reflect.KClass
 
 /**
